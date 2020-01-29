@@ -27,7 +27,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-
+    return node->distance(*end_node);
 }
 
 
@@ -39,6 +39,8 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
+    current_node.neighbors = current_node->FindNeighbors();
+    
 
 }
 
@@ -88,7 +90,7 @@ void RoutePlanner::AStarSearch() {
 
     // TODO: Implement your solution here.
 
-    cout << "start_node: " << start_node << "\n";
-    cout <<  "end_node: " << end_node << "\n";
+    //cout << "start_node: " << start_node << "\n";
+    //cout <<  "end_node: " << end_node << "\n";
 
 }
