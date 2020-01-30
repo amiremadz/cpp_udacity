@@ -61,7 +61,31 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
+float Routeplanner::ComputeSum(RouteModel::Node *node)
+{
+    return node->g_value + node->h_value;
+}
+
 RouteModel::Node *RoutePlanner::NextNode() {
+
+    for (int i = 0; i < open_list.size() - 1; i++)
+    {
+        lower_sum_node = open_list[0];
+        for(int j = 0; j < open_list.size() - 1; j++)
+        {
+            if(ComputeSum(lower_sum_node < ComputeSum(open_list[j+1]))){
+                swap_node = open_list[j+1]
+                open_list[j+1] = lower_sum_node;
+                open_list[j] = swap_node;
+                
+            }
+        }
+
+    }
+
+    lowest_node_pointer = open_list.back();
+    open_list.pop_back();
+    return lowest_node_pointer;
 
 }
 
