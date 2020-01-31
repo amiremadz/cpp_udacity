@@ -61,7 +61,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
-float Routeplanner::ComputeSum(RouteModel::Node *node)
+float RoutePlanner::ComputeSum(RouteModel::Node *node)
 {
     return node->g_value + node->h_value;
 }
@@ -70,11 +70,15 @@ RouteModel::Node *RoutePlanner::NextNode() {
 
     for (int i = 0; i < open_list.size() - 1; i++)
     {
-        lower_sum_node = open_list[0];
         for(int j = 0; j < open_list.size() - 1; j++)
         {
-            if(ComputeSum(lower_sum_node < ComputeSum(open_list[j+1]))){
-                swap_node = open_list[j+1]
+            if(ComputeSum(open_list[j]) < ComputeSum(open_list[j+1])){
+
+                cout << "Lower Sum Node: " << ComputeSum(open_list[j]) << "\n";
+                cout << "Next Sum Node: " << ComputeSum(open_list[j+1]) << "\n";
+
+                lower_sum_node = open_list[j];
+                swap_node = open_list[j+1];
                 open_list[j+1] = lower_sum_node;
                 open_list[j] = swap_node;
                 
@@ -102,8 +106,30 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     // Create path_found vector
     distance = 0.0f;
     std::vector<RouteModel::Node> path_found;
+    std::vector<RouteModel::Node> temp_found;
 
     // TODO: Implement your solution here.
+
+    path_found.push_back(*(start_node));
+
+    next_parent = current_node->parent;
+
+    while (next_parent != start_node)
+    {
+        current_parent = next_parent;
+        temp_found.push_back(*(current_parent));
+        next_parent = current_parent->parent;
+        distance += next_parent->distance(*current_parent);
+    }
+
+
+    for (int i = 0; i < temp_found.size(); i++)
+    {
+        path_found.push_back(temp_found[i]);
+    }
+    
+
+    path_found.push_back(*end_node);
 
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
