@@ -16,8 +16,6 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     start_node = &m_Model.FindClosestNode(start_x, start_y);
     end_node = &m_Model.FindClosestNode(end_x, end_y);
-
-
 }
 
 
@@ -40,6 +38,15 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     current_node->FindNeighbors();
+    //cout << "# of neighbors: " << current_node->neighbors.size() << "\n";
+    /*
+
+    for (RouteModel::Node *node : current_node->neighbors)
+    {
+        cout << "Neighbors: (x , y, h, g, Sum (h,g))" << "\n";
+        cout << "(" << node->x << " ," << node->y << " ," << node->h_value << " ," << node->g_value << " ," << ComputeSum(node) << " )\n";
+    }
+    */
 
     for(RouteModel::Node *node : current_node->neighbors)
     {
@@ -48,8 +55,16 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         node->g_value = current_node->g_value + current_node->distance(*node);
         open_list.emplace_back(node);
         node->visited = true;
-    }
 
+        //cout << "g_value = " << current_node->g_value << " + " << current_node->distance(*node) << " = " << current_node->g_value + current_node->distance(*node) << "\n";
+    }
+    /*
+    for (RouteModel::Node *node : open_list)
+    {
+        cout << "Open List: (x , y, h, g)" << "\n";
+        cout << "(" << node->x << " ," << node->y << " ," << node->h_value << " ," << node->g_value << " ," << ComputeSum(node) << " )\n";
+    }
+    */
 
 }
 
@@ -68,25 +83,41 @@ float RoutePlanner::ComputeSum(RouteModel::Node *node)
 
 RouteModel::Node *RoutePlanner::NextNode() {
 
-    for (int i = 0; i < open_list.size() - 1; i++)
+    /*
+    cout << "Unsorted Open List Size: " << open_list.size() << "\n";
+    
+    for (RouteModel::Node *node : open_list)
     {
-        for(int j = 0; j < open_list.size() - 1; j++)
+        cout << "Unsorted Open List sum(g,h): " << ComputeSum(node) <<  "\n";
+    }
+    */
+
+    for (int i = 0; i < open_list.size() -1; ++i)       //Sorted routine verified
+    {
+        for(int j = 0; j < open_list.size() - 1; ++j)
         {
             if(ComputeSum(open_list[j]) < ComputeSum(open_list[j+1])){
-
-                cout << "Lower Sum Node: " << ComputeSum(open_list[j]) << "\n";
-                cout << "Next Sum Node: " << ComputeSum(open_list[j+1]) << "\n";
 
                 lower_sum_node = open_list[j];
                 swap_node = open_list[j+1];
                 open_list[j+1] = lower_sum_node;
                 open_list[j] = swap_node;
-                
             }
         }
 
     }
 
+    cout << "Sorted Open List Size: " << open_list.size() << "\n";
+
+    /*
+    
+    for (RouteModel::Node *node : open_list)
+    {
+        cout << "Sorted Open List sum(g,h): " << ComputeSum(node) <<  "\n";
+    }
+
+    /*/
+    
     lowest_node_pointer = open_list.back();
     open_list.pop_back();
     return lowest_node_pointer;
@@ -111,8 +142,10 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     // TODO: Implement your solution here.
 
     path_found.push_back(*(start_node));
+    
 
     next_parent = current_node->parent;
+    distance += next_parent->distance(*current_node);
 
     while (next_parent != start_node)
     {
@@ -122,20 +155,24 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
         distance += next_parent->distance(*current_parent);
     }
 
-
-    for (int i = 0; i < temp_found.size(); i++)
+    for (int j = temp_found.size() -1; j >= 0; --j)
     {
-        path_found.push_back(temp_found[i]);
+        path_found.push_back(temp_found[j]);
     }
     
-
     path_found.push_back(*end_node);
 
+    for (RouteModel::Node node : path_found)
+    {
+        cout << "Path found: (x , y, h, g, sum(g,h))" << "\n";      //Why is the g value of the start node not 0?
+        cout << "(" << node.x << ", " << node.y << ", " << node.h_value << ", " << node.g_value << ", " << ComputeSum(&node) << ")\n";
+    }
+    
+    
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
 
 }
-
 
 // TODO 7: Write the A* Search algorithm here.
 // Tips:
@@ -146,10 +183,35 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
+    int counter = 0;
+    //RouteModel::Node *next_node;
+
 
     // TODO: Implement your solution here.
 
-    //cout << "start_node: " << start_node << "\n";
-    //cout <<  "end_node: " << end_node << "\n";
+    current_node = start_node;
 
+    while(current_node != end_node)
+    {
+        AddNeighbors(current_node);
+        current_node = NextNode();
+
+
+        cout << "Start node x: " << start_node->x << "\n";
+        cout << "Start node y: " << start_node->y << "\n";
+        cout << "End node x: " << end_node->x << "\n";
+        cout << "End node y: " << end_node->y << "\n";
+        cout << "-----------\n";
+
+        cout << "current node (x): " <<current_node->x <<"\n";
+        cout << "current node (y): " <<current_node->y <<"\n";
+        cout << "Counter: " << counter << "\n";
+        counter ++;
+        cout << "----------------------------------\n";
+    }
+
+
+    m_Model.path = ConstructFinalPath(end_node);
+
+    
 }

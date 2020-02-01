@@ -19,6 +19,7 @@ class RoutePlanner {
     RouteModel::Node *lowest_node_pointer; 
     RouteModel::Node *current_parent;
     RouteModel::Node *next_parent;
+    
 
     // The following methods have been made public so we can test them individually.
     void AddNeighbors(RouteModel::Node *current_node);
