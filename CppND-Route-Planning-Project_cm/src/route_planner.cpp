@@ -83,18 +83,9 @@ float RoutePlanner::ComputeSum(RouteModel::Node *node)
 
 RouteModel::Node *RoutePlanner::NextNode() {
 
-    /*
-    cout << "Unsorted Open List Size: " << open_list.size() << "\n";
-    
-    for (RouteModel::Node *node : open_list)
+    for (int i = 0; i < open_list.size() -1; i++)       //Sorted routine verified
     {
-        cout << "Unsorted Open List sum(g,h): " << ComputeSum(node) <<  "\n";
-    }
-    */
-
-    for (int i = 0; i < open_list.size() -1; ++i)       //Sorted routine verified
-    {
-        for(int j = 0; j < open_list.size() - 1; ++j)
+        for(int j = 0; j < open_list.size() - 1; j++)
         {
             if(ComputeSum(open_list[j]) < ComputeSum(open_list[j+1])){
 
@@ -106,19 +97,11 @@ RouteModel::Node *RoutePlanner::NextNode() {
         }
 
     }
-
-    cout << "Sorted Open List Size: " << open_list.size() << "\n";
-
-    /*
-    
-    for (RouteModel::Node *node : open_list)
-    {
-        cout << "Sorted Open List sum(g,h): " << ComputeSum(node) <<  "\n";
-    }
-
-    /*/
     
     lowest_node_pointer = open_list.back();
+
+    //cout << "Next Node (x, y): ( " << lowest_node_pointer->x << ", " << lowest_node_pointer->y << ")\n";
+
     open_list.pop_back();
     return lowest_node_pointer;
 
@@ -162,12 +145,16 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     
     path_found.push_back(*end_node);
 
+    
+
     for (RouteModel::Node node : path_found)
     {
         cout << "Path found: (x , y, h, g, sum(g,h))" << "\n";      //Why is the g value of the start node not 0?
         cout << "(" << node.x << ", " << node.y << ", " << node.h_value << ", " << node.g_value << ", " << ComputeSum(&node) << ")\n";
     }
     
+    
+    cout <<"Nodes traveled: " << path_found.size() <<"\n";
     
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
@@ -195,7 +182,6 @@ void RoutePlanner::AStarSearch() {
     {
         AddNeighbors(current_node);
         current_node = NextNode();
-
 
         cout << "Start node x: " << start_node->x << "\n";
         cout << "Start node y: " << start_node->y << "\n";

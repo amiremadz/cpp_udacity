@@ -69,7 +69,7 @@ int main(int argc, const char **argv)
     std::cout << "Enter Start X: \n";
     std::cin >> end_x;
     std::cout << "Enter Start X: \n";
-    std::cin >> end_x;
+    std::cin >> end_y;
     
     // Build Model.
     RouteModel model{osm_data};
