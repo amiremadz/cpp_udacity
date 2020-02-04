@@ -38,33 +38,17 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     current_node->FindNeighbors();
-    //cout << "# of neighbors: " << current_node->neighbors.size() << "\n";
-    /*
 
-    for (RouteModel::Node *node : current_node->neighbors)
-    {
-        cout << "Neighbors: (x , y, h, g, Sum (h,g))" << "\n";
-        cout << "(" << node->x << " ," << node->y << " ," << node->h_value << " ," << node->g_value << " ," << ComputeSum(node) << " )\n";
-    }
-    */
 
     for(RouteModel::Node *node : current_node->neighbors)
     {
         node->parent = current_node;
         node->h_value = CalculateHValue(node);
         node->g_value = current_node->g_value + current_node->distance(*node);
-        open_list.emplace_back(node);
+        open_list.push_back(node);
         node->visited = true;
 
-        //cout << "g_value = " << current_node->g_value << " + " << current_node->distance(*node) << " = " << current_node->g_value + current_node->distance(*node) << "\n";
     }
-    /*
-    for (RouteModel::Node *node : open_list)
-    {
-        cout << "Open List: (x , y, h, g)" << "\n";
-        cout << "(" << node->x << " ," << node->y << " ," << node->h_value << " ," << node->g_value << " ," << ComputeSum(node) << " )\n";
-    }
-    */
 
 }
 
@@ -83,7 +67,7 @@ float RoutePlanner::ComputeSum(RouteModel::Node *node)
 
 RouteModel::Node *RoutePlanner::NextNode() {
 
-    for (int i = 0; i < open_list.size() -1; i++)       //Sorted routine verified
+    for (int i = 0; i < open_list.size() - 1; i++)       //Sorted routine verified
     {
         for(int j = 0; j < open_list.size() - 1; j++)
         {
@@ -95,13 +79,9 @@ RouteModel::Node *RoutePlanner::NextNode() {
                 open_list[j] = swap_node;
             }
         }
-
     }
     
     lowest_node_pointer = open_list.back();
-
-    //cout << "Next Node (x, y): ( " << lowest_node_pointer->x << ", " << lowest_node_pointer->y << ")\n";
-
     open_list.pop_back();
     return lowest_node_pointer;
 
@@ -146,13 +126,6 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     path_found.push_back(*end_node);
 
     
-
-    for (RouteModel::Node node : path_found)
-    {
-        cout << "Path found: (x , y, h, g, sum(g,h))" << "\n";      //Why is the g value of the start node not 0?
-        cout << "(" << node.x << ", " << node.y << ", " << node.h_value << ", " << node.g_value << ", " << ComputeSum(&node) << ")\n";
-    }
-    
     
     cout <<"Nodes traveled: " << path_found.size() <<"\n";
     
@@ -171,30 +144,35 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
     int counter = 0;
-    //RouteModel::Node *next_node;
 
 
+    
     // TODO: Implement your solution here.
 
     current_node = start_node;
+
+    current_node->visited = true;
+
+    
 
     while(current_node != end_node)
     {
         AddNeighbors(current_node);
         current_node = NextNode();
 
+        /*
+        cout << "----------------------------------\n";
         cout << "Start node x: " << start_node->x << "\n";
         cout << "Start node y: " << start_node->y << "\n";
         cout << "End node x: " << end_node->x << "\n";
         cout << "End node y: " << end_node->y << "\n";
-        cout << "-----------\n";
-
-        cout << "current node (x): " <<current_node->x <<"\n";
-        cout << "current node (y): " <<current_node->y <<"\n";
+    
         cout << "Counter: " << counter << "\n";
         counter ++;
-        cout << "----------------------------------\n";
+        */
+
     }
+
 
 
     m_Model.path = ConstructFinalPath(end_node);
