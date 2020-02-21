@@ -6,8 +6,12 @@
 Basic class for Process representation
 It contains relevant attributes as shown below
 */
-class Process {
+
+//Include LinuxParser namespace
+
+class Process  {
  public:
+ // Add constructor to populate all attributes for PID instance upon creation and store into process vector
   int Pid();                               // TODO: See src/process.cpp
   std::string User();                      // TODO: See src/process.cpp
   std::string Command();                   // TODO: See src/process.cpp
