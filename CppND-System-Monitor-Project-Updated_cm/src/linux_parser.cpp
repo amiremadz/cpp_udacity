@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <unistd.h>
 
 #include "linux_parser.h"
 
@@ -92,10 +93,6 @@ float LinuxParser::MemoryUtilization() {
           if (key == "Buffers") buffers = value;
     }
    }
-  //std::cout << "MemTotal: " << mem_total << "\n";
-  //std::cout << "MemFree: " << mem_free << "\n";
-  //std::cout << "Mem_Avail: " << mem_avail << "\n";
-  //std::cout << "Buffers: " << buffers << "\n";
    }
    return (mem_total - mem_free)/mem_total*100.0; 
 }
@@ -128,7 +125,31 @@ long LinuxParser::Jiffies()
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::ActiveJiffies(int PID)
+ {  
+  long CpuData {};
+  string line, cpu;
+  int counter = 0;
+  std::ifstream stream(kProcDirectory + to_string(PID) + kStatFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::stringstream linestream(line);
+    while (linestream >> cpu)
+    {
+      if (counter > 12 && counter < 18)
+      {
+        CpuData += (stol(cpu));
+      }
+      if (counter == 22)
+      {
+        CpuData += (stol(cpu));;
+      }
+
+      counter ++;
+    }
+  }
+  return CpuData;
+   }
 
 // TODO: Read and return the number of active jiffies for the system
 long LinuxParser::ActiveJiffies()
@@ -171,7 +192,7 @@ vector<string> LinuxParser::CpuUtilization()
       counter ++;
     }
   }
-  return CpuData;;
+  return CpuData;
 }
 
 // TODO: Read and return the total number of processes
@@ -216,14 +237,48 @@ int LinuxParser::RunningProcesses()
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid) 
+string LinuxParser::Command(int PID) 
 { 
-  return string(); 
+  string pid = to_string(PID);
+  string line;
+  string key;
+  string value;
+  string command;
+
+  std::ifstream filestream(kProcDirectory + pid + kCmdlineFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> value) {
+          command += value;
+          command += " ";
+    }
+   }
+   }
+  return command; 
 }
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int PID)
+ {
+  string value;
+  string line;
+  string key;
+  string ram;
+
+  std::ifstream filestream(kProcDirectory + to_string(PID) + kStatusFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+          if (key == "VmSize") ram = value;
+    }
+   }
+   }
+   return ram; 
+}
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
@@ -275,7 +330,28 @@ string LinuxParser::User(int PID)
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::UpTime(int PID) 
+{ 
+  long CpuData {};
+  string line, cpu;
+  int counter = 0;
+  std::ifstream stream(kProcDirectory + to_string(PID) + kStatFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::stringstream linestream(line);
+    while (linestream >> cpu)
+    {
+      if (counter == 22)
+      {
+        CpuData = (stol(cpu));;
+      }
+
+      counter ++;
+    }
+  }
+  return LinuxParser::UpTime() - CpuData/sysconf(_SC_CLK_TCK);
+  
+}
 
 
 
@@ -320,9 +396,17 @@ int main ()
  std::cout << "Active Jiffies: " << LinuxParser::ActiveJiffies() << "\n";
  std::cout << "Idle Jiffies: " << LinuxParser::IdleJiffies() << "\n";
 
- std::cout << "Uid: " << LinuxParser::Uid(13809) << "\n";
+ std::cout << "Uid: " << LinuxParser::Uid(6284) << "\n";
 
- std::cout << "User: " << LinuxParser::User(13809) << "\n";
+ std::cout << "User: " << LinuxParser::User(6284) << "\n";
+
+ std::cout << "Active PID Jiffies: " << LinuxParser::ActiveJiffies(6284) << "\n";
+
+ std::cout << "Command for PID: " << LinuxParser::Command(6284) << "\n";
+
+ std::cout << "PID Uptime: " << LinuxParser::UpTime(6284) << "\n";
+
+ std::cout << "PID ram: " << LinuxParser::Ram(6284) << "\n";
   
 
 }
