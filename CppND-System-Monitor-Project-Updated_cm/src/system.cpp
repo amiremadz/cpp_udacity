@@ -21,9 +21,11 @@ using std::vector;
 // TODO: Return the system's CPU
 Processor& System::Cpu() 
 {
-    cpu_util = cpu_.Utilization();
+    //cpu_util = cpu_.Utilization();
     return cpu_; 
 }
+
+/*
 
 float System::GetCpu()
 {
@@ -31,20 +33,40 @@ float System::GetCpu()
     return cpu_util;
 }
 
+*/
 
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() 
 { 
     int pid {};
-    for (int i=0; i < LinuxParser::Pids().size(); i++) 
+
+    Process Larger(0);
+
+    processes_.clear(); // clean out processes from last iteration
+
+    for (int i=0; i < LinuxParser::Pids().size(); i++) //Gather all new processes found in proc
     {
         pid = LinuxParser::Pids()[i];
         processes_.push_back(Process(pid)); 
-
     }
-    
-    return processes_; 
+
+    for(int i = 0; i < processes_.size() - 1; i++) 
+         {                                                //Sort Processes by cpu usage
+        for(int j = 0; j < processes_.size() - 1; j ++)
+        {
+            if(processes_[j].CpuUtilization() < processes_[j+1].CpuUtilization())
+                {
+                    Larger = processes_[j+1];
+                    processes_[j+1] = processes_[j];
+                    processes_[j] = Larger;
+                }
+
+        }
+
+         }
+
+        return processes_; 
     
     }
 

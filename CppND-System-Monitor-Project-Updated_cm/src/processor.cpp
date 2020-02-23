@@ -28,16 +28,7 @@ float Processor::Utilization()
     prev_idle = idle_t;
     prev_time = time;
 
-    return ((total_delta - idle_delta)/total_delta)/(time_delta)*100000;
+    return ((total_delta - idle_delta)/total_delta)/(time_delta);
 
 }
 
-
-/*
-int main()
-{
-    Processor p1;
-    std::cout << p1.Utilization() << "\n";
-
-}
-*/

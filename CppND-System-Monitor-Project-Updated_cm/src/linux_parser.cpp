@@ -78,8 +78,8 @@ float LinuxParser::MemoryUtilization() {
   double value;
   double mem_total;
   double mem_free;
-  double mem_avail;
-  double buffers;
+  //double mem_avail;
+  //double buffers;
 
   std::ifstream filestream(kProcDirectory + kMeminfoFilename);
   if (filestream.is_open()) {
@@ -89,8 +89,8 @@ float LinuxParser::MemoryUtilization() {
       while (linestream >> key >> value) {
           if (key == "MemTotal") mem_total = value;
           if (key == "MemFree") mem_free = value;
-          if (key == "MemAvailable") mem_avail = value;
-          if (key == "Buffers") buffers = value;
+          //if (key == "MemAvailable") mem_avail = value;
+          //if (key == "Buffers") buffers = value;
     }
    }
    }
@@ -119,7 +119,7 @@ long LinuxParser::Jiffies()
 {
   long sum {};
 
-  for (int i= 0; i < LinuxParser::CpuUtilization().size(); i ++)
+  for (int i= 0; i < 8; i ++)
   {
     sum += stoi(LinuxParser::CpuUtilization()[i]);
   }
@@ -158,7 +158,7 @@ long LinuxParser::ActiveJiffies(int PID)
 long LinuxParser::ActiveJiffies()
  { 
    long sum{};
-    for (int i= 0; i < LinuxParser::CpuUtilization().size(); i ++)
+    for (int i= 0; i < 8; i ++)
     {
       if (i != 3 && i != 4)
       {
@@ -280,7 +280,10 @@ string LinuxParser::Ram(int PID)
     }
    }
    }
-   return ram; 
+
+  ram.resize(6);
+
+  return ram; 
 }
 
 // TODO: Read and return the user ID associated with a process

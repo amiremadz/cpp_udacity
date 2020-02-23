@@ -31,7 +31,7 @@ return PID;
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() 
 { 
-cpu_usage = ((LinuxParser::ActiveJiffies(PID)/ sysconf(_SC_CLK_TCK)) / LinuxParser::UpTime(PID)/10);    
+cpu_usage = ((LinuxParser::ActiveJiffies(PID)/ sysconf(_SC_CLK_TCK)) / LinuxParser::UpTime(PID)/1000);    
 return cpu_usage; 
 }
 
@@ -72,6 +72,16 @@ long int Process::UpTime()
     return LinuxParser::UpTime(PID); 
 }
 
+
+/*
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+bool Process::operator<(Process const& pro) const 
+{ 
+    if (CpuUtilization() < pro.CpuUtilization())
+        {return true;}
+    
+    else return false; 
+}
+
+*/

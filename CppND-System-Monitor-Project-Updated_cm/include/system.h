@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 
-//#include "process.h"
-//#include "processor.h"
+#include "process.h"
+#include "processor.h"
 
 class System {
  public:
   Processor& Cpu();                   // TODO: See src/system.cpp
-  float GetCpu();
-  //std::vector<Process>& Processes();  // TODO: See src/system.cpp
+  //float GetCpu();
+  std::vector<Process>& Processes();  // TODO: See src/system.cpp
   float MemoryUtilization();          // TODO: See src/system.cpp
   long UpTime();                      // TODO: See src/system.cpp
   int TotalProcesses();               // TODO: See src/system.cpp
@@ -22,8 +22,8 @@ class System {
   // TODO: Define any necessary private members
  private:
   Processor cpu_ {};
-  float cpu_util {};
-  //std::vector<Process> processes_ = {};
+  //float cpu_util {};
+  std::vector<Process> processes_ = {};
 };
 
 #endif
