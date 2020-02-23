@@ -111,7 +111,7 @@ long LinuxParser::UpTime()
     linestream >> active >> excess1 >> idle >> excess2;
 
   }
-  return active + idle;
+  return (active + idle)/10;
 }
 
 // TODO: Read and return the number of jiffies for the system

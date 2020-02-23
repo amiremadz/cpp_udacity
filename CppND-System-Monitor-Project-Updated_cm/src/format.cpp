@@ -14,15 +14,16 @@ string Format::ElapsedTime(long seconds)
 string time;
 
 int hours;
-int minutes;
+long minutes;
 int sec;
 
-minutes = (seconds/60);
-hours = (minutes/60);
-sec = seconds%(minutes%60;
-minutes = minutes - hours*60;
 
-time = std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+
+hours = seconds/3600;
+minutes = (seconds - (hours*3600))/60;
+sec = seconds - (minutes*60) - (hours*3600);
+
+time = std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string(sec);
     
 return time; 
      

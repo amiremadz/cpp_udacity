@@ -31,7 +31,7 @@ return PID;
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() 
 { 
-cpu_usage = ((LinuxParser::ActiveJiffies(PID)/ sysconf(_SC_CLK_TCK)) / LinuxParser::UpTime(PID));    
+cpu_usage = ((LinuxParser::ActiveJiffies(PID)/ sysconf(_SC_CLK_TCK)) / LinuxParser::UpTime(PID)/10);    
 return cpu_usage; 
 }
 
