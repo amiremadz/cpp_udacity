@@ -94,19 +94,22 @@ float LinuxParser::MemoryUtilization() {
     }
    }
    }
-   return (mem_total - mem_free)/mem_total*100.0; 
+   return ((mem_total - mem_free)/mem_total); 
 }
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() 
 { 
-  long active, idle;
+  long active, idle {};
+  int excess1, excess2 {};
   string line;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
-    std::stringstream linestream(line);
-    linestream >> active >> idle;
+    std::replace(line.begin(), line.end(), '.', ' ');
+    std::istringstream linestream(line);
+    linestream >> active >> excess1 >> idle >> excess2;
+
   }
   return active + idle;
 }
@@ -330,7 +333,7 @@ string LinuxParser::User(int PID)
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int PID) 
+long int LinuxParser::UpTime(int PID) 
 { 
   long CpuData {};
   string line, cpu;
@@ -341,7 +344,7 @@ long LinuxParser::UpTime(int PID)
     std::stringstream linestream(line);
     while (linestream >> cpu)
     {
-      if (counter == 22)
+      if (counter == 23)
       {
         CpuData = (stol(cpu));;
       }
@@ -349,12 +352,13 @@ long LinuxParser::UpTime(int PID)
       counter ++;
     }
   }
-  return LinuxParser::UpTime() - CpuData/sysconf(_SC_CLK_TCK);
+  return UpTime() - CpuData/sysconf(_SC_CLK_TCK);
+
   
 }
 
 
-
+/*
 int main ()
 
 {
@@ -364,7 +368,7 @@ int main ()
 
   std::cout << "Mem Utilization: " << LinuxParser::MemoryUtilization() << "\n";
 
-
+  
   std::cout <<"PIDs: \n";
 
   for (int i = 0; i < LinuxParser::Pids().size(); i++ )
@@ -377,6 +381,7 @@ int main ()
     }
   }
   
+  
 
   std::cout << "\n" << "Uptime: " << LinuxParser::UpTime() << "\n";
 
@@ -386,10 +391,13 @@ int main ()
   
   LinuxParser::CpuUtilization();
 
+
+
   for(int i = 0; i < LinuxParser::CpuUtilization().size(); i++)
   {
   std::cout << "Cpu Data: " << LinuxParser::CpuUtilization()[i] << "\n";
   }
+  
   
 
  std::cout << "Jiffies: " << LinuxParser::Jiffies() << "\n";
@@ -400,16 +408,24 @@ int main ()
 
  std::cout << "User: " << LinuxParser::User(6284) << "\n";
 
- std::cout << "Active PID Jiffies: " << LinuxParser::ActiveJiffies(6284) << "\n";
+ std::cout << "Active PID Jiffies: " << LinuxParser::ActiveJiffies(1) << "\n";
 
  std::cout << "Command for PID: " << LinuxParser::Command(6284) << "\n";
 
- std::cout << "PID Uptime: " << LinuxParser::UpTime(6284) << "\n";
+ std::cout << "PID Uptime: " << LinuxParser::UpTime(1) << "\n";
 
  std::cout << "PID ram: " << LinuxParser::Ram(6284) << "\n";
+
+ std::cout << "CPU Usage: " << (LinuxParser::ActiveJiffies(1)/sysconf(_SC_CLK_TCK)) * (100 / LinuxParser::UpTime(1)) << "\n";
   
 
 }
+
+*/
+
+
+
+
 
 
 

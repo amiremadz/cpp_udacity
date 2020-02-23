@@ -31,7 +31,7 @@ return PID;
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() 
 { 
-cpu_usage = 100 * ((LinuxParser::ActiveJiffies(PID) / sysconf(_SC_CLK_TCK)) / LinuxParser::UpTime(PID));    
+cpu_usage = ((LinuxParser::ActiveJiffies(PID)/ sysconf(_SC_CLK_TCK)) / LinuxParser::UpTime(PID));    
 return cpu_usage; 
 }
 
@@ -55,14 +55,15 @@ string Process::Ram()
 
 // TODO: Return the user (name) that generated this process
 string Process::User() 
-{ 
+{
     if (user != " ") return user;
 
     else 
     {
-    command = LinuxParser::User(PID);
+    user = LinuxParser::User(PID);
     return user; 
     }
+
 }
 
 // TODO: Return the aaboveabovege of this process (in seconds)
