@@ -73,7 +73,7 @@ long int Process::UpTime()
 }
 
 
-/*
+/* Decided to not use, i sorted in system.processes the old fashion way - would love to see comments about how to make this work
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& pro) const 

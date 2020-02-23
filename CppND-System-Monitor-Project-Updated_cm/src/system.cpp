@@ -21,19 +21,9 @@ using std::vector;
 // TODO: Return the system's CPU
 Processor& System::Cpu() 
 {
-    //cpu_util = cpu_.Utilization();
     return cpu_; 
 }
 
-/*
-
-float System::GetCpu()
-{
-    Cpu();
-    return cpu_util;
-}
-
-*/
 
 
 // TODO: Return a container composed of the system's processes
@@ -108,7 +98,7 @@ long System::UpTime()
 }
 
 /*
-int main()
+int main() main function for unit tests
 
 {
     System sys1;
