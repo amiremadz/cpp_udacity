@@ -10,11 +10,11 @@
 float Processor::Utilization() 
 {
 
-    double idle_t, non_idle, total, total_delta, idle_delta, time, time_delta;
+    double idle_t, total, total_delta, idle_delta, time, time_delta;
 
 
     idle_t = LinuxParser::IdleJiffies();
-    non_idle = LinuxParser::ActiveJiffies();
+    //non_idle = LinuxParser::ActiveJiffies();
     total = LinuxParser::Jiffies();
     time = LinuxParser::UpTime();
 

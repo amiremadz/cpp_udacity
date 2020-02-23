@@ -35,15 +35,15 @@ vector<Process>& System::Processes()
 
     processes_.clear(); // clean out processes from last iteration
 
-    for (int i=0; i < LinuxParser::Pids().size(); i++) //Gather all new processes found in proc
+    for (unsigned int i=0; i < LinuxParser::Pids().size(); i++) //Gather all new processes found in proc
     {
         pid = LinuxParser::Pids()[i];
         processes_.push_back(Process(pid)); 
     }
 
-    for(int i = 0; i < processes_.size() - 1; i++) 
+    for(unsigned int i = 0; i < processes_.size() - 1; i++) 
          {                                                //Sort Processes by cpu usage
-        for(int j = 0; j < processes_.size() - 1; j ++)
+        for(unsigned int j = 0; j < processes_.size() - 1; j ++)
         {
             if(processes_[j].CpuUtilization() < processes_[j+1].CpuUtilization())
                 {
