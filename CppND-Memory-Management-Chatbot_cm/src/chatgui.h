@@ -2,6 +2,7 @@
 #define CHATGUI_H_
 
 #include <wx/wx.h>
+#include<memory>
 
 class ChatLogic; // forward declaration
 
@@ -17,6 +18,8 @@ private:
     ////
 
     ChatLogic *_chatLogic;
+    //std::unique_ptr<ChatLogic> _chatLogic = std::make_unique<ChatLogic>();
+    //std::unique_ptr<ChatLogic> _chatLogic(new ChatLogic()); 
 
     ////
     //// EOF STUDENT CODE
