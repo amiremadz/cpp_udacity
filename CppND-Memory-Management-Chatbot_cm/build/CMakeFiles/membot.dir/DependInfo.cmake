@@ -4,11 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatbot.cpp" "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/chatbot.cpp.o"
-  "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatgui.cpp" "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/chatgui.cpp.o"
-  "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatlogic.cpp" "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/chatlogic.cpp.o"
-  "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.cpp" "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/graphedge.cpp.o"
-  "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.cpp" "/home/talos/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/graphnode.cpp.o"
+  "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatbot.cpp" "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/chatbot.cpp.o"
+  "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatgui.cpp" "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/chatgui.cpp.o"
+  "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatlogic.cpp" "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/chatlogic.cpp.o"
+  "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.cpp" "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/graphedge.cpp.o"
+  "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.cpp" "/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/build/CMakeFiles/membot.dir/src/graphnode.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
