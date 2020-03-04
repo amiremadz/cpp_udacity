@@ -6,48 +6,10 @@
 
 #IncludeRegexTransform: 
 
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatbot.cpp
-iostream
--
-random
--
-algorithm
--
-ctime
--
-chatlogic.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatlogic.h
-graphnode.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.h
-graphedge.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.h
-chatbot.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatbot.h
-
 /home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatbot.h
 wx/bitmap.h
 -
 string
--
-
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatgui.cpp
-wx/filename.h
--
-wx/colour.h
--
-wx/image.h
--
-string
--
-chatbot.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatbot.h
-chatlogic.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatlogic.h
-chatgui.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatgui.h
-memory
--
-iostream
 -
 
 /home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatgui.h
@@ -85,26 +47,16 @@ vector
 -
 string
 -
+memory
+-
 chatgui.h
 /home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/chatgui.h
-
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.cpp
-graphnode.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.h
-graphedge.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.h
 
 /home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.h
 vector
 -
 string
 -
-
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.cpp
-graphedge.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphedge.h
-graphnode.h
-/home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.h
 
 /home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.h
 vector
