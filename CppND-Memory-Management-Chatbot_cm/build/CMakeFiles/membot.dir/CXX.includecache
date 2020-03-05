@@ -57,6 +57,8 @@ vector
 -
 string
 -
+memory
+-
 
 /home/chace/Github/cpp_udacity/CppND-Memory-Management-Chatbot_cm/src/graphnode.h
 vector
