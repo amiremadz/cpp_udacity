@@ -282,4 +282,3 @@ wxBitmap *ChatLogic::GetImageFromChatbot()
 {
     return _chatBot->GetImageHandle();
 }
-cd
