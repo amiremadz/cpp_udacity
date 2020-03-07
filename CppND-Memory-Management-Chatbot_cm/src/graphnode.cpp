@@ -15,7 +15,7 @@ GraphNode::~GraphNode()
     //// STUDENT CODE
     ////
 
-    delete _chatBot; 
+    //delete _chatBot; 
 
     ////
     //// EOF STUDENT CODE
@@ -41,7 +41,10 @@ void GraphNode::AddEdgeToChildNode(GraphEdge *edge)     //(std::unique_ptr<Graph
 ////
 void GraphNode::MoveChatbotHere(ChatBot *chatbot)
 {
-    std::cout << "MoveCBHere.get() " << chatbot << "\n";
+    //std::cout << "MoveCBHere.get() " << chatbot << "\n";
+
+    //Use move semantics from task 2 and not std::move()?? this will allow for desired printing? 
+    //Maybe this = sign is aready the move assignment operator we already need
 
     _chatBot = chatbot;                     //std::move(chatbot);
     _chatBot->SetCurrentNode(this);
@@ -50,7 +53,9 @@ void GraphNode::MoveChatbotHere(ChatBot *chatbot)
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
 
-    std::cout << "ChatbotMoveNew: " << _chatBot << "\n";
+    //Use move semantics from task 2 and not std::move()?? this will allow for desired printing?
+
+    //std::cout << "ChatbotMoveNew: " << _chatBot << "\n";
     newNode->MoveChatbotHere(_chatBot);          //std::move(_chatBot)
     _chatBot = nullptr; // invalidate pointer at source
 }

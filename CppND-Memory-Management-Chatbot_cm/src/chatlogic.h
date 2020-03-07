@@ -18,8 +18,8 @@ private:
     ////
 
     // data handles (owned)
-    std::vector<GraphNode *> _nodes;
-    //std::vector<std::unique_ptr<GraphNode>> _nodes;
+    //std::vector<GraphNode *> _nodes;
+    std::vector<std::unique_ptr<GraphNode>> _nodes;
 
     std::vector<GraphEdge*> _edges; //holds both incoming and outgoing edges -  might be a shared pointer?
     //std::vector<std::unique_ptr<GraphEdge>> _edges;
