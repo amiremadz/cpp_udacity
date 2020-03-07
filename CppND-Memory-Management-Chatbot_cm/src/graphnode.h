@@ -4,23 +4,27 @@
 #include <vector>
 #include <string>
 #include "chatbot.h"
+#include <memory>
 
 
 // forward declarations
 class GraphEdge;
-
+//class ChatBot;
 class GraphNode
 {
 private:
     //// STUDENT CODE
     ////
 
-    // data handles (owned)
+    // data handles (owned) - make unique here and in getter function?
     std::vector<GraphEdge *> _childEdges;  // edges to subsequent nodes
+    //std::unique_ptr<std::vector<GraphEdge>> _childEdges;
 
     // data handles (not owned)
     std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes 
     ChatBot *_chatBot;
+    //std::unique_ptr<ChatBot> _chatBot(new ChatBot);
+    //std::unique_ptr<ChatBot> _chatBot = std::make_unique<ChatBot>();
 
     ////
     //// EOF STUDENT CODE
@@ -30,6 +34,7 @@ private:
     std::vector<std::string> _answers;
 
 public:
+
     // constructor / destructor
     GraphNode(int id);
     ~GraphNode();
@@ -44,12 +49,12 @@ public:
     // proprietary functions
     void AddToken(std::string token); // add answers to list
     void AddEdgeToParentNode(GraphEdge *edge);
-    void AddEdgeToChildNode(GraphEdge *edge);
+    void AddEdgeToChildNode(GraphEdge *edge);   //std::unique_ptr<GraphEdge> edge
 
     //// STUDENT CODE
     ////
 
-    void MoveChatbotHere(ChatBot *chatbot);
+    void MoveChatbotHere(ChatBot *chatbot); // ChatBot *chatbot //std::unique_ptr<ChatBot> chatbot
 
     ////
     //// EOF STUDENT CODE

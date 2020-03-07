@@ -45,6 +45,92 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+//Copy constructor (rule of three)
+ChatBot::ChatBot(const ChatBot &source)
+{
+    std::cout << "ChatBot Copy Constructor \n";
+
+    //Copy data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    
+    //Copy image handle
+    _image = source._image;
+}
+
+//overloaded copy assignment operator
+ChatBot& ChatBot::operator=(const ChatBot &source)
+{
+    std::cout << "ChatBot Copy Assignment Operator \n";
+
+    //return assigner if trying to copy itself
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    //Copy data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    
+    //Copy image handle
+    _image = source._image;
+
+    return *this;
+}
+
+//Move Constructor
+ChatBot::ChatBot(const ChatBot &&source)
+{
+    std::cout << "ChatBot Move Constructor \n";
+
+    //Copy data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    
+    //Copy image handle
+    _image = source._image;
+
+    /* Commented out to clear "read only object" err from unique pointer
+    //clean out source content
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+
+    //Clean out image?
+    source._image = nullptr;
+    */
+}
+
+ChatBot& ChatBot::operator=(const ChatBot &&source)
+{
+    std::cout << "ChatBot Move Assignment Operator \n";
+
+    //return assigner if trying to copy itself
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    //Copy data handles
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    
+    //Copy image handle
+    _image = source._image;
+
+    /* Commented out to clear "read only object" err from unique pointer
+    //clean out source content
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+
+    //Clean out image?
+    source._image = nullptr;
+    */
+
+    return *this;
+
+}
+
 ////
 //// EOF STUDENT CODE
 
@@ -79,6 +165,8 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
     }
 
     // tell current node to move chatbot to new node
+
+    std::cout << "Assigning newNode in chatbot.cpp: " << newNode << "\n";
     _currentNode->MoveChatbotToNewNode(newNode);
 }
 
