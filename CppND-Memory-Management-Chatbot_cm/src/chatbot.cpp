@@ -192,7 +192,7 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::string answer = answers.at(dis(generator));
 
     // send selected node answer to user
-    _chatLogic->SetChatbotHandle(this);
+    _chatLogic->SetChatbotHandle(this);     //pushing bot handle to new state
     _chatLogic->SendMessageToUser(answer);
 }
 

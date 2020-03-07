@@ -178,8 +178,8 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             auto edge = std::make_unique<GraphEdge>(id); //Edges are now unique for means of giving exclusive ownership to GraphNode
 
     
-                            edge->SetChildNode(childNode.base()->get());   //        pass raw pointers instead of use move semantics to retain ownership
-                            edge->SetParentNode(parentNode.base()->get()); //           (*childNode).get()
+                            edge->SetChildNode((*childNode).get());   //        pass raw pointers instead of use move semantics to retain ownership
+                            edge->SetParentNode((*parentNode).get()); //           
                             //_edges.push_back(edge); all edges are moved to Graph node now
 
 
@@ -229,7 +229,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
             if (rootNode == nullptr)
             {
-                rootNode = it.base()->get(); // assign current node to root (*it).get()
+                rootNode = (*it).get(); // assign current node to root 
 
                 //std::cout << "Root Node: " << rootNode << "\n";
             }
@@ -249,7 +249,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     //For this part, try not using a unique pointer, and instead utilize move semantics used in task 2
 
     ChatBot cb("../images/chatbot.png");             //"../images/chatbot.png" holding here because not needed with empty constructor    
-    cb.SetChatLogicHandle(this);   //Do we need this?
+    cb.SetChatLogicHandle(this);   
     cb.SetRootNode(rootNode);
     rootNode->MoveChatbotHere(std::move(cb));   //Using move semantics to transfer cb instance to graph node  
     
@@ -282,3 +282,4 @@ wxBitmap *ChatLogic::GetImageFromChatbot()
 {
     return _chatBot->GetImageHandle();
 }
+cd
