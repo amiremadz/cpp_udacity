@@ -174,9 +174,11 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
                             std::unique_ptr<GraphEdge> edge(new GraphEdge(id));
 
-                            edge->SetChildNode((*childNode).get());
-                            edge->SetParentNode((*parentNode).get()); //std::move(*parentNode)
-                            _edges.push_back(edge.get());
+                            std::cout << " child node: " << (*childNode).get() << "\n";
+
+                            edge->SetChildNode(std::move(childNode));
+                            edge->SetParentNode(std::move(parentNode)); //std::move(*parentNode)
+                            _edges.push_back(std::move(edge));
 
 
                             // find all keywords for current node
