@@ -134,12 +134,15 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         ////
 
                         // check if node with this ID exists already
-                        auto newNode = std::find_if(_nodes.begin(), _nodes.end(), [&id](const std::unique_ptr<GraphNode> &node) { return node->GetID() == id; });
+                        auto newNode = std::find_if(_nodes.begin(), _nodes.end(), [&id](GraphNode *node) { return node->GetID() == id; });
+
+
+                        //const std::unique_ptr<GraphNode> &node
 
                         // create new element if ID does not yet exist
                         if (newNode == _nodes.end())
                         {
-                            _nodes.emplace_back(std::unique_ptr<GraphNode> (new GraphNode(id)));
+                            _nodes.emplace_back(new GraphNode(id));        //std::unique_ptr<GraphNode> (new GraphNode(id))  
                             newNode = _nodes.end() - 1; // get iterator to last element
 
                             // add all answers to current node
@@ -165,20 +168,20 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         if (parentToken != tokens.end() && childToken != tokens.end())
                         {
                             // get iterator on incoming and outgoing node via ID search
-                            auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), [&parentToken](const std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(parentToken->second); });
-                            auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](const std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(childToken->second); });
+                            auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), [&parentToken](GraphNode *node) { return node->GetID() == std::stoi(parentToken->second); });
+                            auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](GraphNode *node) { return node->GetID() == std::stoi(childToken->second); });
 
                             
                             // create new edge
-                            //GraphEdge *edge = new GraphEdge(id);        //change to shared or unique pointer here?
+                            GraphEdge *edge = new GraphEdge(id);        //change to shared or unique pointer here?
 
-                            std::unique_ptr<GraphEdge> edge(new GraphEdge(id));
+                            //std::unique_ptr<GraphEdge> edge(new GraphEdge(id));
 
-                            std::cout << " child node: " << (*childNode).get() << "\n";
+                            //std::cout << " child node: " << (*childNode).get() << "\n";
 
-                            edge->SetChildNode(std::move(childNode));
-                            edge->SetParentNode(std::move(parentNode)); //std::move(*parentNode)
-                            _edges.push_back(std::move(edge));
+                            edge->SetChildNode(*childNode);   //??
+                            edge->SetParentNode(*parentNode); //std::move(*parentNode)
+                            _edges.push_back(edge);
 
 
                             // find all keywords for current node
@@ -186,8 +189,8 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge.get());        // maintain non owning ownership?
-                            (*parentNode)->AddEdgeToChildNode(edge.get());        //give exclusive ownership? - owning references
+                            (*childNode)->AddEdgeToParentNode(edge);        // maintain non owning ownership?
+                            (*parentNode)->AddEdgeToChildNode(edge);        //give exclusive ownership? - owning references
 
                             //_edges.push_back(std::move(edge))
 
@@ -223,12 +226,12 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it) //auto& it : _nodes
     {
         // search for nodes which have no incoming edges
-        if ((*it)->GetNumberOfParents() == 0)
+        if ((*it)->GetNumberOfParents() == 0)           //(*it) for unique pointer
         {
 
             if (rootNode == nullptr)
             {
-                rootNode = (*it).get(); // assign current node to root
+                rootNode = *it; // assign current node to root
 
                 std::cout << "Root Node: " << rootNode << "\n";
             }
