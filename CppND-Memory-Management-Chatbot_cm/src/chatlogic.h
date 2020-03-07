@@ -19,9 +19,9 @@ private:
 
     // data handles (owned)
     //std::vector<GraphNode *> _nodes;
-    std::vector<std::unique_ptr<GraphNode>> _nodes;
+    std::vector<std::unique_ptr<GraphNode>> _nodes;         //Chatlogic owns all nodes
 
-    std::vector<GraphEdge*> _edges; //holds both incoming and outgoing edges -  might be a shared pointer?
+    //std::vector<GraphEdge*> _edges; //removed because ownership of all edges are moved into graphNode - edge to child node with each cycle
     //std::vector<std::unique_ptr<GraphEdge>> _edges;
 
     ////

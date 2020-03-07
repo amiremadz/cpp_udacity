@@ -31,33 +31,32 @@ void GraphNode::AddEdgeToParentNode(GraphEdge *edge)
     _parentEdges.push_back(edge);
 }
 
-void GraphNode::AddEdgeToChildNode(GraphEdge *edge)     //(std::unique_ptr<GraphEdge> edge
+void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)     //(std::unique_ptr<GraphEdge> edge
 {
 
-    _childEdges.push_back(edge);
+    _childEdges.push_back(std::move(edge));
 }
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot *chatbot)
+void GraphNode::MoveChatbotHere(ChatBot chatbot)
 {
     //std::cout << "MoveCBHere.get() " << chatbot << "\n";
 
-    //Use move semantics from task 2 and not std::move()?? this will allow for desired printing? 
-    //Maybe this = sign is aready the move assignment operator we already need
+    //Use move semantics from task 2 and not std::move() with unique_ptr
 
-    _chatBot = chatbot;                     //std::move(chatbot);
-    _chatBot->SetCurrentNode(this);
+    _chatBot = std::move(chatbot);                     
+    _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
 
-    //Use move semantics from task 2 and not std::move()?? this will allow for desired printing?
+    //Use move semantics from task 2 and not std::move() with unique pointer
 
     //std::cout << "ChatbotMoveNew: " << _chatBot << "\n";
-    newNode->MoveChatbotHere(_chatBot);          //std::move(_chatBot)
-    _chatBot = nullptr; // invalidate pointer at source
+    newNode->MoveChatbotHere(std::move(_chatBot));          //std::move(_chatBot)
+    //_chatBot = nullptr; // invalidate pointer at source - not needed any more since we are moving chatbot around
 }
 ////
 //// EOF STUDENT CODE
@@ -65,9 +64,9 @@ void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 GraphEdge *GraphNode::GetChildEdgeAtIndex(int index)
 {
     //// STUDENT CODE
-    //// ?? what to do here? should i do something?
+    //// added .get() to return address of unique pointer
 
-    return _childEdges[index];
+    return _childEdges[index].get();
 
     ////
     //// EOF STUDENT CODE

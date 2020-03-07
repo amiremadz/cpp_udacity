@@ -53,9 +53,10 @@ ChatBot::ChatBot(const ChatBot &source)
     //Copy data handles
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     
     //Copy image handle
-    _image = source._image;
+    _image = new wxBitmap(*source._image);              //source._image;
 }
 
 //overloaded copy assignment operator
@@ -69,39 +70,44 @@ ChatBot& ChatBot::operator=(const ChatBot &source)
         return *this;
     }
 
+    delete _image;
+
+    _image = new wxBitmap(*source._image);
+
     //Copy data handles
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     
-    //Copy image handle
-    _image = source._image;
 
     return *this;
 }
 
 //Move Constructor
-ChatBot::ChatBot(const ChatBot &&source)
+ChatBot::ChatBot(ChatBot &&source)
 {
     std::cout << "ChatBot Move Constructor \n";
 
     //Copy data handles
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     
     //Copy image handle
     _image = source._image;
 
-    /* Commented out to clear "read only object" err from unique pointer
+     //Commented out to clear "read only object" err from unique pointer
     //clean out source content
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
+    source._currentNode = nullptr;
 
     //Clean out image?
-    source._image = nullptr;
-    */
+    source._image = NULL;
+    
 }
 
-ChatBot& ChatBot::operator=(const ChatBot &&source)
+ChatBot& ChatBot::operator=(ChatBot &&source)
 {
     std::cout << "ChatBot Move Assignment Operator \n";
 
@@ -111,21 +117,25 @@ ChatBot& ChatBot::operator=(const ChatBot &&source)
         return *this;
     }
 
+    delete _image;
+
     //Copy data handles
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     
     //Copy image handle
     _image = source._image;
 
-    /* Commented out to clear "read only object" err from unique pointer
+    // Commented out to clear "read only object" err from unique pointer
     //clean out source content
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
+    source._currentNode = nullptr;
 
-    //Clean out image?
-    source._image = nullptr;
-    */
+    //Clean out image
+    source._image = NULL;
+    
 
     return *this;
 
@@ -182,6 +192,7 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::string answer = answers.at(dis(generator));
 
     // send selected node answer to user
+    _chatLogic->SetChatbotHandle(this);
     _chatLogic->SendMessageToUser(answer);
 }
 

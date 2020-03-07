@@ -123,6 +123,8 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
 
     //std::cout << "This @ CPD Chat Logic: " << this << "\n";
 
+    _chatLogic = std::make_unique<ChatLogic>();
+
     // pass pointer to chatbot dialog so answers can be displayed in GUI
     _chatLogic->SetPanelDialogHandle(this);
 

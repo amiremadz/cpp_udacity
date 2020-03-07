@@ -17,12 +17,12 @@ private:
     ////
 
     // data handles (owned) - make unique here and in getter function?
-    std::vector<GraphEdge *> _childEdges;  // edges to subsequent nodes
-    //std::unique_ptr<std::vector<GraphEdge>> _childEdges;
+    //std::vector<GraphEdge *> _childEdges;  // edges to subsequent nodes
+    std::vector<std::unique_ptr<GraphEdge>> _childEdges;
 
     // data handles (not owned)
     std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes 
-    ChatBot *_chatBot;
+    ChatBot _chatBot;
     //std::unique_ptr<ChatBot> _chatBot(new ChatBot);
     //std::unique_ptr<ChatBot> _chatBot = std::make_unique<ChatBot>();
 
@@ -49,12 +49,12 @@ public:
     // proprietary functions
     void AddToken(std::string token); // add answers to list
     void AddEdgeToParentNode(GraphEdge *edge);
-    void AddEdgeToChildNode(GraphEdge *edge);   //std::unique_ptr<GraphEdge> edge
+    void AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge);   //std::unique_ptr<GraphEdge> edge
 
     //// STUDENT CODE
     ////
 
-    void MoveChatbotHere(ChatBot *chatbot); // ChatBot *chatbot //std::unique_ptr<ChatBot> chatbot
+    void MoveChatbotHere(ChatBot chatbot); // ChatBot *chatbot //std::unique_ptr<ChatBot> chatbot
 
     ////
     //// EOF STUDENT CODE

@@ -19,10 +19,10 @@ ChatLogic::ChatLogic()
     ////
 
     // create instance of chatbot
-    _chatBot = new ChatBot("../images/chatbot.png");
+    //_chatBot = new ChatBot("../images/chatbot.png");
 
     // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
-    _chatBot->SetChatLogicHandle(this);
+    //_chatBot->SetChatLogicHandle(this);
 
     ////
     //// EOF STUDENT CODE
@@ -34,21 +34,23 @@ ChatLogic::~ChatLogic()
     ////
 
     // delete chatbot instance
-    delete _chatBot;
+    //delete _chatBot;
 
-       /*      // delete all nodes
+     /*        // delete all nodes - do not need because smart pointers
     for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
+    {
+        delete it;
+    }
+
+    
+    /*
+    // delete all edges -- no more container of edges to delete
+    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
     {
         delete *it;
     }
 
     */
-    
-    // delete all edges
-    for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-    {
-        delete *it;
-    }
     
     
     ////
@@ -132,7 +134,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         ////
 
                         // check if node with this ID exists already
-                        auto newNode = std::find_if(_nodes.begin(), _nodes.end(), [&id](std::unique_ptr<GraphNode> &node) { return node->GetID() == id; });
+                        auto newNode = std::find_if(_nodes.begin(), _nodes.end(), [&id](std::unique_ptr<GraphNode> const& node) { return node->GetID() == id; });
 
 
                         //const std::unique_ptr<GraphNode> &node
@@ -140,7 +142,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         // create new element if ID does not yet exist
                         if (newNode == _nodes.end())
                         {
-                            _nodes.emplace_back(std::unique_ptr<GraphNode> (new GraphNode(id)));        //std::unique_ptr<GraphNode> (new GraphNode(id))  
+                            _nodes.emplace_back(std::make_unique<GraphNode>(id));        //std::unique_ptr<GraphNode> (new GraphNode(id))  
                             newNode = _nodes.end() - 1; // get iterator to last element
 
                             // add all answers to current node
@@ -166,20 +168,19 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         if (parentToken != tokens.end() && childToken != tokens.end())
                         {
                             // get iterator on incoming and outgoing node via ID search
-                            auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), [&parentToken](std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(parentToken->second); });
-                            auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(childToken->second); });
+                            auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), [&parentToken](std::unique_ptr<GraphNode> const& node) { return node->GetID() == std::stoi(parentToken->second); });
+                            auto childNode = std::find_if(_nodes.begin(), _nodes.end(), [&childToken](std::unique_ptr<GraphNode> const& node) { return node->GetID() == std::stoi(childToken->second); });
 
                             
                             // create new edge
-                            GraphEdge *edge = new GraphEdge(id);        //change to shared or unique pointer here?
+                            //GraphEdge *edge = new GraphEdge(id);        //change to shared or unique pointer here?
 
-                            //std::unique_ptr<GraphEdge> edge(new GraphEdge(id));
+                            auto edge = std::make_unique<GraphEdge>(id); //Edges are now unique for means of giving exclusive ownership to GraphNode
 
-                            //std::cout << " child node: " << (*childNode).get() << "\n";
-
-                            edge->SetChildNode((*childNode).get());   //??
-                            edge->SetParentNode((*parentNode).get()); //std::move(*parentNode)
-                            _edges.push_back(edge);
+    
+                            edge->SetChildNode(childNode.base()->get());   //        pass raw pointers instead of use move semantics to retain ownership
+                            edge->SetParentNode(parentNode.base()->get()); //           (*childNode).get()
+                            //_edges.push_back(edge); all edges are moved to Graph node now
 
 
                             // find all keywords for current node
@@ -187,10 +188,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
 
                             // store reference in child node and parent node
-                            (*childNode)->AddEdgeToParentNode(edge);        // maintain non owning ownership?
-                            (*parentNode)->AddEdgeToChildNode(edge);        //give exclusive ownership? - owning references
+                            (*childNode)->AddEdgeToParentNode(edge.get());              // maintain non owning ownership for partent edges in GraphNode
+                            (*parentNode)->AddEdgeToChildNode(std::move(edge));        //give exclusive ownership? - owning references
 
-                            //_edges.push_back(std::move(edge))
 
                         }
 
@@ -229,7 +229,7 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
 
             if (rootNode == nullptr)
             {
-                rootNode = (*it).get(); // assign current node to root
+                rootNode = it.base()->get(); // assign current node to root (*it).get()
 
                 //std::cout << "Root Node: " << rootNode << "\n";
             }
@@ -243,26 +243,16 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     
 
     // add chatbot to graph root node
-    _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere(_chatBot);    //**How to pass this as unique pointer??
+    //_chatBot->SetRootNode(rootNode);
+    //rootNode->MoveChatbotHere(_chatBot);    //**How to pass this as unique pointer??
 
+    //For this part, try not using a unique pointer, and instead utilize move semantics used in task 2
 
-    /*
-    For this part, try not using a unique pointer, and instead utilize move semantics used in task 2
-
-
-
-    //std::unique_ptr<ChatBot> cb(new ChatBot());
-    std::unique_ptr<ChatBot> cb = std::make_unique<ChatBot>();
-    cb->SetChatLogicHandle(this);   //Do we need this?
-    cb->SetRootNode(rootNode);
-    //rootNode->MoveChatbotHere(std::move(cb));
+    ChatBot cb("../images/chatbot.png");             //"../images/chatbot.png" holding here because not needed with empty constructor    
+    cb.SetChatLogicHandle(this);   //Do we need this?
+    cb.SetRootNode(rootNode);
+    rootNode->MoveChatbotHere(std::move(cb));   //Using move semantics to transfer cb instance to graph node  
     
-    std::cout << "Chatbot.get(): " << cb.get() << "\n";
-
-    rootNode->MoveChatbotHere(std::move(cb));      //std::move(cb)
-
-    */
     
     ////
     //// EOF STUDENT CODE
