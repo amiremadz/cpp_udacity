@@ -1,0 +1,12 @@
+Cmake Notes:
+
+#add debug flags to cmake
+cmake -DCMAKE_BUILD_TYPE=Debug .. 
+
+gdb <.o file name>
+
+run
+
+bt
+
+
