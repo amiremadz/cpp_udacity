@@ -7,13 +7,12 @@
 
 
 Wall::Wall(std::size_t grid_width, std::size_t grid_height) :
- _wallSeed_x(grid_width /2 - 2),
+ _wallSeed_x(grid_width /2 - 10),
   _wallSeed_y(grid_height/2), limit(grid_width) {
 
   std::cout << "Wall Constructor" << "\n";
-  //std::cout<< "Wall size:" << wall.size() << "\n";
 
-  for (int i = 0; i < _wallLength; i ++)    //SDL_Point  &point : wall
+  for (int i = 0; i < _wallLength; i ++)  
     {
       SDL_Point block{
       static_cast<int>(_wallSeed_x) + i,
@@ -21,6 +20,14 @@ Wall::Wall(std::size_t grid_width, std::size_t grid_height) :
       _wall.push_back(block);
     }
   //std::cout<< "Wall size:" << _wall.size() << "\n";
+}
+
+void Wall::KillThread()
+{
+  std::cout << "Killing thread \n";
+  isOperating = false;
+  //exitThread.set_value();
+  update_thread.join();
 }
 
 void Wall::ChangeDirection()
@@ -38,19 +45,20 @@ void Wall::ChangeDirection()
 
 void Wall::UpdateWall()
 {
-  _wall[0].x = static_cast<int>(_wallSeed_x);
-  for (int i = 1; i < _wallLength; i ++)  
-  {
-  _wall[i].x = _wallSeed_x + i;
-  //std::cout << "Wall i.x: " << _wall[i].x << "\n";
-  }
+  //futureThreadobj = exitThread.get_future();
+  //update_thread = std::thread(&Wall::MoveWall, std::ref(futureThreadobj));
+  update_thread = std::thread(&Wall::MoveWall, this);
 }
 
 void Wall::MoveWall()
 {
-  //while(true) {
 
-    //std::cout << "Moving Wall thread: "<< _wallSeed_x << "\n"; 
+  //int counter = 0;
+
+  while(isOperating ==true) {
+
+    std::lock_guard<std::mutex> lck(_mutex);
+
     switch (_wallDirection) {
 
       case WallDirection::kForeward:
@@ -68,15 +76,25 @@ void Wall::MoveWall()
       {
         {
           ChangeDirection();
-          _wallSeed_y += _wallSpeed;
+          _wallSeed_x += _wallSpeed;
         }
       }
     }
 
-    //std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    UpdateWall();
+    _wall[0].x = static_cast<int>(_wallSeed_x);
 
-  //}
+    for (int i = 1; i < _wallLength; i ++)  
+    {
+    _wall[i].x = _wallSeed_x + i;
+    }
+
+
+    //std::cout << "Moving Wall Iteration #: " << counter << "\n";
+    //counter +=1;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));    //Delay to control speed of wall moving, also helps with thread data access
+
+  }
 }
 
 std::vector<SDL_Point> Wall::GetWallCord()
@@ -94,6 +112,8 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
   PlaceFood();
 }
 
+Game::~Game(){};
+
 void Game::Run(Controller  &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -101,11 +121,13 @@ void Game::Run(Controller  &controller, Renderer &renderer,
   Uint32 frame_end;
   Uint32 frame_duration;
   int frame_count = 0;
-  bool running = true;
+  //bool running = true;
+
+  wall.UpdateWall();  //initiate thread to constantly move wall back and fourth
+  
 
   while (running) {
 
-    wall->MoveWall();
 
     frame_start = SDL_GetTicks();
 
@@ -113,7 +135,7 @@ void Game::Run(Controller  &controller, Renderer &renderer,
     controller.HandleInput(running, snake);
     int moves = controller.GetKeyMove();
     Update();
-    renderer.Render(snake, food, wall->GetWallCord());
+    renderer.Render(snake, food, wall.GetWallCord());
 
     frame_end = SDL_GetTicks();
 
@@ -135,7 +157,11 @@ void Game::Run(Controller  &controller, Renderer &renderer,
     if (frame_duration < target_frame_duration) {
       SDL_Delay(target_frame_duration - frame_duration);
     }
+
+    if(!snake.alive) running = false;
   }
+  wall.KillThread();
+ 
 }
 
 void Game::PlaceFood() {
@@ -145,9 +171,10 @@ void Game::PlaceFood() {
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!snake.SnakeCell(x, y) && x < 32 && y < 32) {
       food.x = x;
       food.y = y;
+      std::cout<< "Food (x,y): (" << food.x <<", " << food.y << ")\n";
       return;
     }
   }
@@ -155,8 +182,29 @@ void Game::PlaceFood() {
 
 
 void Game::Update() {
-  if (!snake.alive) return;
+  
 
+  for (auto const &block : wall.GetWallCord())        //check to see if the snake's body hit the wall, if so the game is over
+    {
+      for (auto const &item : snake.body)
+      {
+        //std::cout<< "wall (x,y): (" << block.x <<", " << block.y << ")\n";
+        //std::cout<< "snake (x,y): (" << item.x <<", " << item.y << ")\n";
+        if(block.x == item.x && block.y == item.y) 
+        {
+          snake.alive = false;
+        }
+      }
+
+      std::cout<< "wall (x,y): (" << block.x <<", " << block.y << ")\n";
+      std::cout<< "snake head (x,y): (" << static_cast<int>(snake.head_x) <<", " << static_cast<int>(snake.head_y) << ")\n";
+      if (block.x == static_cast<int>(snake.head_x) && block.y == static_cast<int>(snake.head_y)) //check to see if snake's head hit the wall
+      {
+        snake.alive = false;
+      }
+    }
+
+  if (!snake.alive) return;
 
   snake.Update();
 
