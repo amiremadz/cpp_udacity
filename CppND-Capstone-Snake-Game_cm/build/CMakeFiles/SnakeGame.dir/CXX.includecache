@@ -12,20 +12,6 @@ snake.h
 memory
 -
 
-/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/game.cpp
-game.h
-/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/game.h
-iostream
--
-SDL.h
-/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/SDL.h
-chrono
--
-thread
--
-future
--
-
 /home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/game.h
 random
 -
@@ -45,6 +31,22 @@ iostream
 -
 future
 -
+wall.h
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/wall.h
+
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/main.cpp
+iostream
+-
+controller.h
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/controller.h
+game.h
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/game.h
+renderer.h
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/renderer.h
+thread
+-
+chrono
+-
 
 /home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/renderer.h
 vector
@@ -55,6 +57,20 @@ snake.h
 /home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/snake.h
 
 /home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/snake.h
+vector
+-
+SDL.h
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/SDL.h
+
+/home/chace/Github/cpp_udacity/CppND-Capstone-Snake-Game_cm/src/wall.h
+mutex
+-
+thread
+-
+iostream
+-
+future
+-
 vector
 -
 SDL.h
