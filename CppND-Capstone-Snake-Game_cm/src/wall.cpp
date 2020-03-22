@@ -10,7 +10,7 @@ Wall::Wall(std::size_t grid_width, std::size_t grid_height, int challenge) :
   _wallSeed_y(grid_height/2), limit(grid_width),
   difficulty(challenge) {
 
-  std::cout << "Wall Constructor" << "\n";
+  //std::cout << "Wall Constructor" << "\n";
 
   for (int i = 0; i < _wallLength; i ++)  
     {

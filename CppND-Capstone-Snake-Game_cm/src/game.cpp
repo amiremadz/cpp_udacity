@@ -77,7 +77,7 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y) && x < 32 && y < 32) {
       food.x = x;
       food.y = y;
-      std::cout<< "Food (x,y): (" << food.x <<", " << food.y << ")\n";
+      //std::cout<< "Food (x,y): (" << food.x <<", " << food.y << ")\n";
       return;
     }
   }
