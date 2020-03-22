@@ -23,6 +23,8 @@
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
+
+
 This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
 
 ## Modifications Made to Starter Repo to Fullfil Project Requiresments
@@ -35,7 +37,17 @@ This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree P
 
 <img src="annotated_terminal_output.png"/>
 
-### Rubric Criteria Met
+### Rubric Criteria Met (in additional to Required Rubric Points)
+
+#### Loops, Functions, I/O
+
+* The project demonstrates an understanding of C++ founctions and control structures: A variety of control structures are used in the project. the project     code is clearly organized into functions. (wall.cpp)
+
+* The project accepts user input and processes the input: The project accepts input from a user as part of the necessary operation of the program. (Lines 19 to 49 in main)
+
+
+
+
 
 
 
