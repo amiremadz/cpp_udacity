@@ -33,7 +33,7 @@ This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree P
 
 
 
-<img src="annotated_terminal_putput.png>"/>
+<img src="annotated_terminal_output.png>"/>
 
 ### Rubric Criteria Met
 
