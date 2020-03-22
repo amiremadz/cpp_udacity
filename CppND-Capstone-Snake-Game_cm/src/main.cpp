@@ -4,6 +4,7 @@
 #include "renderer.h"
 #include <thread>
 #include <chrono>
+#include <limits>
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
@@ -12,7 +13,7 @@ int main() {
   constexpr std::size_t kScreenHeight{640}; //640
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
-  int difficulty;
+  int difficulty {0};
   bool acceptable = false;
 
   std::cout << "Choose Difficulty level(integer) - 1 (easy) <==> 5 (hard): \n";
@@ -22,12 +23,17 @@ int main() {
    if (difficulty > 0 && difficulty < 6) acceptable = true;
 
    else
-    while(acceptable == false)
+    while(acceptable == false || !(std::cin >> difficulty))
       {
+      std::cin.clear();                                                               //functionality to block non integers
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::cout << "Invalid input, please try entering difficulty again: \n";
       std::cin >> difficulty;
-      std::cout << "Difficulty: " << difficulty << "\n";
-      if (difficulty > 0 &&  difficulty < 6) acceptable = true;
+      if (difficulty > 0 &&  difficulty < 6) 
+      {
+        acceptable = true;
+        break;
+      }
       }
    
 
