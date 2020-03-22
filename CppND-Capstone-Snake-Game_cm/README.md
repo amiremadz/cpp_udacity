@@ -41,9 +41,35 @@ This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree P
 
 #### Loops, Functions, I/O
 
-* The project demonstrates an understanding of C++ founctions and control structures: A variety of control structures are used in the project. the project     code is clearly organized into functions. (wall.cpp)
+* The project demonstrates an understanding of C++ founctions and control structures: wall.cpp.
 
-* The project accepts user input and processes the input: The project accepts input from a user as part of the necessary operation of the program. (Lines 19 to 49 in main)
+* The project accepts user input and processes the input: Lines 19 to 49 in main. 
+
+#### Object Oriented Programming
+
+* The project uses Object oriented Programming techniques: wall.cpp.
+
+* Classes use appropriates access specifiers for class members: main.h.
+
+* Class constructors utilize member initialization lists: Wall::Wall() in wall.cpp.
+
+* Classes abstract implementation details from their interfaces: implementation of wall in game.cpp.
+
+* Classes encapsulate behavior: class wall in wall.cpp
+
+#### Memory management
+
+* The project uses scope / RAII where appropriate: Objects such as unique_ptr moves in controller.cpp / .h utilize smart pointers to ensure proper allocation and deallocation of memory on the heap.
+
+* The project uses smart pointers instead of raw pointers: Smart pointer - moves in controller.cpp / h
+
+#### Concurrency
+
+* The project uses multithreading: See member function MoveWall() in wall.cpp
+
+* A mutex or lock is used in the project: See member function MoveWall() in wall.cpp
+
+
 
 
 
